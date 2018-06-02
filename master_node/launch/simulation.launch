@@ -1,0 +1,22 @@
+<launch>
+    <!--SIMULATION LAUNCH FILE
+        Does not initializes ZED camera
+        Does not initializes serial connection with MCU
+        Uses video file as input to the system
+        -->
+
+    <!-- INITIALIZE LINE DETECTOR (VIDEO, ZED, WEBCAM, BAGFILE ETC)-->
+    <!-- <include file="$(find line_detector)/launch/video.launch"/> -->
+    <include file="$(find line_detector)/launch/video.launch"/>
+
+    <!-- INITIALIZE VIEW TRANSFORMATION
+    <include file="$(find birds_eye)/launch/segment_warper.launch"/> -->
+    <include file="$(find birds_eye)/launch/verbose_test.launch"/>
+
+    <!-- INITIALIZE LANE CONTROL -->
+    <include file="$(find lane_control)/launch/lane_control.launch"/>
+
+    <!-- INITIALIZE BOARD PUBLISHER -->
+    <include file="$(find board_connection)/launch/board_connection.launch"/>
+
+</launch>
