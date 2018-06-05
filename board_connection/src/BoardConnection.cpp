@@ -28,13 +28,14 @@ BoardConnection::~BoardConnection() = default;
 bool BoardConnection::readParameters() {
   // If all parameters are loaded
   if(nodeHandle_.getParam("subscriber_topic", subscriberTopic_)
-      && nodeHandle_.getParam("publisher_topic", publisherTopic_))
+      && nodeHandle_.getParam("publisher_topic", publisherTopic_)
+      && nodeHandle_.getParam("subs_queue_size", subs_queue_size_)
+      && nodeHandle_.getParam("pubs_queue_size", pubs_queue_size_))
     return true;
   return false;
 }
 
 void BoardConnection::topicCallback(const std_msgs::Float32MultiArray &message) {
-  cout << "Publishing" << endl;
   publisher_.publish(message);
 }
 

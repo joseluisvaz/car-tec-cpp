@@ -27,8 +27,12 @@ class BoardConnection {
   ros::NodeHandle& nodeHandle_;
   ros::Subscriber subscriber_;
   ros::Publisher publisher_;
+
+  // Config parameters
   std::string subscriberTopic_;
   std::string publisherTopic_;
+  int subs_queue_size_;
+  int pubs_queue_size_;
 
 };
 
