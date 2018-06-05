@@ -76,3 +76,5 @@ line-detector/data/*
 
 # node example
 node_example/
+ros_package_template/
+
