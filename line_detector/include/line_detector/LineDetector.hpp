@@ -8,6 +8,10 @@
 #include <ros/ros.h>
 #include <iostream>
 #include <sensor_msgs/Image.h>
+#include <sensor_msgs/image_encodings.h>
+#include <cv_bridge/cv_bridge.h>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 namespace line_detector {
 
@@ -20,12 +24,13 @@ class LineDetector {
  private:
 
   bool readParameters();
-  void topicCallback(const sensor_msgs::Image& message);
+  void topicCallback(const sensor_msgs::ImageConstPtr& message);
 
   // Attributes
   ros::NodeHandle& nodeHandle_;
   ros::Subscriber subscriber_;
   ros::Publisher publisher_;
+
 
   // Config parameters
   std::string subscriberTopic_;
