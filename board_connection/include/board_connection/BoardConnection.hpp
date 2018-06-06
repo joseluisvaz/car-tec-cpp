@@ -14,7 +14,7 @@ namespace board_connection {
 class BoardConnection {
  public:
 
-  BoardConnection(ros::NodeHandle& nodeHandle);
+  explicit BoardConnection(ros::NodeHandle& nodeHandle);
   ~BoardConnection();
 
  private:
