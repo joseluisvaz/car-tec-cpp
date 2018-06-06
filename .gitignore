@@ -73,3 +73,8 @@ catkin_ws/src/zed-ros-wrapper
 fleet.html
  
 line-detector/data/*
+
+# node example
+node_example/
+ros_package_template/
+
