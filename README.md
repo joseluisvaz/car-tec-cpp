@@ -57,3 +57,5 @@ To build from source, clone the latest version from this repository into your ca
 ### NODE_B_NAME
 
 
+# NOTES
+from zed_ros_wrapper repository, checkout v2.2.x branch for integration with CUDA 9.0, ig you are using another CUDA version please make sure to use the correct up-to-date zed_ros_wrapper branch(version).
