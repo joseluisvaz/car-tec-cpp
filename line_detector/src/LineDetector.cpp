@@ -7,7 +7,6 @@
 static const std::string WINDOW_NAME = "OpenCv Window";
 
 using namespace std;
-using namespace cv;
 
 namespace line_detector {
 
@@ -23,13 +22,13 @@ LineDetector::LineDetector(ros::NodeHandle& nodeHandle)
                                       &LineDetector::topicCallback, this);
   publisher_ = nodeHandle_.advertise<sensor_msgs::Image>(publisherTopic_, 1000);
 
-  namedWindow(WINDOW_NAME);
+  cv::namedWindow(WINDOW_NAME);
 
   ROS_INFO("Succesfully launched node. ");
 }
 
 LineDetector::~LineDetector() {
-  destroyWindow(WINDOW_NAME);
+  cv::destroyWindow(WINDOW_NAME);
 };
 
 bool LineDetector::readParameters() {
@@ -45,6 +44,7 @@ bool LineDetector::readParameters() {
 void LineDetector::topicCallback(const sensor_msgs::ImageConstPtr &message) {
 
   cv_bridge::CvImagePtr cv_ptr;
+  cout << "hola" << endl;
 
   try {
     cv_ptr = cv_bridge::toCvCopy(message, sensor_msgs::image_encodings::BGR8);
@@ -56,10 +56,10 @@ void LineDetector::topicCallback(const sensor_msgs::ImageConstPtr &message) {
 
   // If window is big enough
   if (cv_ptr->image.rows > 60 && cv_ptr->image.cols > 60)
-    circle(cv_ptr->image, Point(50, 50), 10, CV_RGB(255,0,0));
+    cv::circle(cv_ptr->image, cv::Point(50, 50), 10, CV_RGB(255,0,0));
 
-  imshow(WINDOW_NAME, cv_ptr->image);
-  waitKey(3);
+  cv::imshow(WINDOW_NAME, cv_ptr->image);
+  cv::waitKey(3);
 
   publisher_.publish(cv_ptr->toImageMsg());
 }
