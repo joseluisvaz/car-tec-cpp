@@ -6,6 +6,8 @@
 #include <ros/ros.h>
 #include "line_detector/LineDetector.hpp"
 
+using namespace std;
+
 int main(int argc, char** argv){
 
   ros::init(argc, argv, "line_detector");

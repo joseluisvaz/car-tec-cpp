@@ -18,11 +18,12 @@ add_definitions(-std=c++11)
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED 
     COMPONENTS
-	cv_bridge
+	    cv_bridge
         car_tec_msgs
         roscpp
         rospy
         std_msgs
+        image_transport
 )
 
 if(NOT ANDROID)
@@ -60,8 +61,8 @@ message(STATUS "    include path: ${OpenCV_INCLUDE_DIRS}")
 catkin_package(
   INCLUDE_DIRS include
 #    ${EIGEN3_INCLUDE_DIR}
-  LIBRARIES line_detector_lib #    ${PROJECT_NAME}_core
-  CATKIN_DEPENDS roscpp rospy std_msgs car_tec_msgs
+  LIBRARIES ${PROJECT_NAME}_core
+  CATKIN_DEPENDS roscpp rospy std_msgs car_tec_msgs image_transport
   DEPENDS Boost OpenCV
 )
 
@@ -81,13 +82,14 @@ include_directories(include ${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS}
 #   src/Algorithm.cpp
 #)
 
-add_library(line_detector_lib
-	src/LineDetector.cpp
+add_library(${PROJECT_NAME}_core
+        src/Detector.cpp
 )
 
 ## Declare cpp executables
 add_executable(${PROJECT_NAME}
-  src/${PROJECT_NAME}_node.cpp
+        src/${PROJECT_NAME}_node.cpp
+        src/LineDetector.cpp
 )
 
 ## Add dependencies to exported targets, like ROS msgs or srvs
@@ -96,7 +98,7 @@ add_executable(${PROJECT_NAME}
 #)
 
 
-add_dependencies(line_detector_lib
+add_dependencies(${PROJECT_NAME}_core
   ${catkin_EXPORTED_TARGETS}
 )
 
@@ -109,15 +111,14 @@ add_dependencies(${PROJECT_NAME}
 #target_link_libraries(${PROJECT_NAME}_core
 #  ${catkin_LIBRARIES}
 #)
-target_link_libraries(line_detector_lib
-#  ${PROJECT_NAME}_core
-	${OpenCV_LIBRARIES}
+target_link_libraries(${PROJECT_NAME}_core
+	    ${OpenCV_LIBS}
         ${catkin_LIBRARIES}
 )
 
 target_link_libraries(${PROJECT_NAME}
-	line_detector_lib
-	${OpenCV_LIBS}
+        ${PROJECT_NAME}_core
+	    ${OpenCV_LIBS}
         ${catkin_LIBRARIES}
 )
 

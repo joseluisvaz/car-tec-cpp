@@ -5,25 +5,34 @@
 #include "line_detector/LineDetector.hpp"
 
 static const std::string WINDOW_NAME = "OpenCv Window";
+static const int SIZE = 5;
 
 using namespace std;
 
 namespace line_detector {
 
-LineDetector::LineDetector(ros::NodeHandle& nodeHandle)
-    : nodeHandle_(nodeHandle) {
+LineDetector::LineDetector(ros::NodeHandle& nh, detector::Detector& detect)
+    : nh_{nh},
+      it_{nh_},
+      detector_{detect}
+  {
 
-  if(!readParameters()) {
+    cout << "hereeee" << detect.getSize() << endl;
+
+  // Test detector
+  if (!readParameters()) {
     ROS_ERROR("Could not read parameters.");
     ros::requestShutdown();
   }
 
-  subscriber_ = nodeHandle_.subscribe(subscriberTopic_, 1,
-                                      &LineDetector::topicCallback, this);
-  publisher_ = nodeHandle_.advertise<sensor_msgs::Image>(publisherTopic_, 1000);
+  subscriber_ = it_.subscribe(subscriberTopic_, 1,
+                              &LineDetector::imageCb, this);
+  publisher1_ = it_.advertise(publisherTopic1_, 1000);
+  publisher2_ = it_.advertise(publisherTopic2_, 1000);
+  publisher3_ = it_.advertise(publisherTopic3_, 1000);
+  publisher4_ = it_.advertise(publisherTopic4_, 1000);
 
   cv::namedWindow(WINDOW_NAME);
-
   ROS_INFO("Succesfully launched node. ");
 }
 
@@ -33,23 +42,25 @@ LineDetector::~LineDetector() {
 
 bool LineDetector::readParameters() {
   // If all parameters are loaded
-  if(nodeHandle_.getParam("subscriber_topic", subscriberTopic_)
-      && nodeHandle_.getParam("publisher_topic", publisherTopic_)
-      && nodeHandle_.getParam("subs_queue_size", subs_queue_size_)
-      && nodeHandle_.getParam("pubs_queue_size", pubs_queue_size_))
+  if (nh_.getParam("subscriber_topic", subscriberTopic_)
+      && nh_.getParam("publisher_topic_1", publisherTopic1_)
+      && nh_.getParam("publisher_topic_2", publisherTopic2_)
+      && nh_.getParam("publisher_topic_3", publisherTopic3_)
+      && nh_.getParam("publisher_topic_4", publisherTopic4_)
+      && nh_.getParam("subs_queue_size", subs_queue_size_)
+      && nh_.getParam("pubs_queue_size", pubs_queue_size_)
+      && nh_.getParam("buff_size", buff_size_))
     return true;
   return false;
 }
 
-void LineDetector::topicCallback(const sensor_msgs::ImageConstPtr &message) {
-
+void LineDetector::imageCb(const sensor_msgs::ImageConstPtr &message) {
   cv_bridge::CvImagePtr cv_ptr;
-  cout << "hola" << endl;
 
   try {
     cv_ptr = cv_bridge::toCvCopy(message, sensor_msgs::image_encodings::BGR8);
   }
-  catch (cv_bridge::Exception & e) {
+  catch (cv_bridge::Exception& e) {
     ROS_ERROR("cv_bridge exception: %s", e.what());
     return;
   }
@@ -61,7 +72,7 @@ void LineDetector::topicCallback(const sensor_msgs::ImageConstPtr &message) {
   cv::imshow(WINDOW_NAME, cv_ptr->image);
   cv::waitKey(3);
 
-  publisher_.publish(cv_ptr->toImageMsg());
+  publisher1_.publish(cv_ptr->toImageMsg());
 }
 
 }
