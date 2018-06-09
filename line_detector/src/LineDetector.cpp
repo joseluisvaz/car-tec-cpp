@@ -47,10 +47,10 @@ bool LineDetector::readParameters() {
       && nh_.getParam("publisher_topic_4", publisherTopic4_)
       && nh_.getParam("subs_queue_size", subs_queue_size_)
       && nh_.getParam("pubs_queue_size", pubs_queue_size_)
-//      && nh_.getParam("hls_white1", hls_white1)
-//      && nh_.getParam("hls_white2", hls_white2)
-//      && nh_.getParam("hls_yellow1", hls_yellow1)
-//      && nh_.getParam("hls_yellow2", hls_yellow2)
+      && nh_.getParam("color_config/hls_white1", hls_white1)
+      && nh_.getParam("color_config/hls_white2", hls_white2)
+      && nh_.getParam("color_config/hls_yellow1", hls_yellow1)
+      && nh_.getParam("color_config/hls_yellow2", hls_yellow2)
       && nh_.getParam("buff_size", buff_size_))
     return true;
   return false;
