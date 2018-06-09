@@ -8,15 +8,15 @@
     <!-- INITIALIZE LINE DETECTOR (VIDEO, ZED, WEBCAM, BAGFILE ETC)-->
     <!-- <include file="$(find line_detector)/launch/video.launch"/> -->
     <include file="$(find line_detector)/launch/video.launch"/>
+    <!---->
+    <!--&lt;!&ndash; INITIALIZE VIEW TRANSFORMATION-->
+    <!--<include file="$(find birds_eye)/launch/segment_warper.launch"/> &ndash;&gt;-->
+    <!--<include file="$(find birds_eye)/launch/segment_warper.launch"/>-->
 
-    <!-- INITIALIZE VIEW TRANSFORMATION
-    <include file="$(find birds_eye)/launch/segment_warper.launch"/> -->
-    <include file="$(find birds_eye)/launch/segment_warper.launch"/>
+    <!--&lt;!&ndash; INITIALIZE LANE CONTROL &ndash;&gt;-->
+    <!--<include file="$(find lane_control)/launch/lane_control.launch"/>-->
 
-    <!-- INITIALIZE LANE CONTROL -->
-    <include file="$(find lane_control)/launch/lane_control.launch"/>
-
-    <!-- INITIALIZE BOARD PUBLISHER -->
-    <include file="$(find board_connection)/launch/board_connection.launch"/>
+    <!--&lt;!&ndash; INITIALIZE BOARD PUBLISHER &ndash;&gt;-->
+    <!--<include file="$(find board_connection)/launch/board_connection.launch"/>-->
 
 </launch>

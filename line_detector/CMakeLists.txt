@@ -83,7 +83,7 @@ include_directories(include ${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS}
 #)
 
 add_library(${PROJECT_NAME}_core
-        src/Detector.cpp
+        src/HoughDetector.cpp
 )
 
 ## Declare cpp executables

@@ -11,15 +11,13 @@ using namespace std;
 
 namespace line_detector {
 
-LineDetector::LineDetector(ros::NodeHandle& nh, detector::Detector& detect)
+LineDetector::LineDetector(ros::NodeHandle& nh, HoughDetector& detect)
     : nh_{nh},
       it_{nh_},
       detector_{detect}
   {
 
-    cout << "hereeee" << detect.getSize() << endl;
-
-  // Test detector
+  // Test hough_detect
   if (!readParameters()) {
     ROS_ERROR("Could not read parameters.");
     ros::requestShutdown();
@@ -49,6 +47,10 @@ bool LineDetector::readParameters() {
       && nh_.getParam("publisher_topic_4", publisherTopic4_)
       && nh_.getParam("subs_queue_size", subs_queue_size_)
       && nh_.getParam("pubs_queue_size", pubs_queue_size_)
+//      && nh_.getParam("hls_white1", hls_white1)
+//      && nh_.getParam("hls_white2", hls_white2)
+//      && nh_.getParam("hls_yellow1", hls_yellow1)
+//      && nh_.getParam("hls_yellow2", hls_yellow2)
       && nh_.getParam("buff_size", buff_size_))
     return true;
   return false;
@@ -59,17 +61,24 @@ void LineDetector::imageCb(const sensor_msgs::ImageConstPtr &message) {
 
   try {
     cv_ptr = cv_bridge::toCvCopy(message, sensor_msgs::image_encodings::BGR8);
+
   }
   catch (cv_bridge::Exception& e) {
     ROS_ERROR("cv_bridge exception: %s", e.what());
     return;
   }
 
-  // If window is big enough
-  if (cv_ptr->image.rows > 60 && cv_ptr->image.cols > 60)
-    cv::circle(cv_ptr->image, cv::Point(50, 50), 10, CV_RGB(255,0,0));
+  cv::Mat input = cv_ptr->image;
+  detector_.setImage(input);
+  detector_.detect();
+  cv::Mat* bw_pImg = detector_.getBwImagePtr();
 
-  cv::imshow(WINDOW_NAME, cv_ptr->image);
+
+  // If window is big enough
+  // if (cv_ptr->image.rows > 60 && cv_ptr->image.cols > 60)
+  // cv::circle(cv_ptr->image, cv::Point(50, 50), 10, CV_RGB(255,0,0));
+
+  cv::imshow(WINDOW_NAME, *bw_pImg);
   cv::waitKey(3);
 
   publisher1_.publish(cv_ptr->toImageMsg());

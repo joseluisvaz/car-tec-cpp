@@ -66,10 +66,10 @@ class LineDetectorImpl:
 
         # TODO: Change name of functions which say unormalized
         if len(white_info.lines) > 0:
-            lines_normalized_white = white_info.lines #* self.detector.get_norm_ratio()
+            lines_normalized_white = white_info.lines #* self.hough_detect.get_norm_ratio()
             segment_list.segments.extend(to_segment_msg(lines_normalized_white, white_info.normals, Segment.WHITE))
         if len(yellow_info.lines) > 0:
-            lines_normalized_yellow = yellow_info.lines #* self.detector.get_norm_ratio()
+            lines_normalized_yellow = yellow_info.lines #* self.hough_detect.get_norm_ratio()
             segment_list.segments.extend(to_segment_msg(lines_normalized_yellow, yellow_info.normals, Segment.YELLOW))
 
         draw_lines(cv_image, white_info.lines, COLOR_RED)
