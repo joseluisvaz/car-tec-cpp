@@ -71,7 +71,7 @@ void LineDetector::imageCb(const sensor_msgs::ImageConstPtr &message) {
   cv::Mat input = cv_ptr->image;
   detector_.setImage(input);
   detector_.detect();
-  cv::Mat* bw_pImg = detector_.getBwImagePtr();
+  cv::Mat* bw_pImg = detector_.getHlsImagePtr();
 
 
   // If window is big enough

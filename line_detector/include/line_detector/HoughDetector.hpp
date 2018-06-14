@@ -23,6 +23,7 @@ class HoughDetector {
   bool setImage(cv::Mat& image);
   cv::Mat* getImagePtr();
   cv::Mat* getBwImagePtr();
+  cv::Mat* getHlsImagePtr();
   int getSize();
 
  private:

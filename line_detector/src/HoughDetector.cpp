@@ -14,6 +14,8 @@ HoughDetector::~HoughDetector() {};
 
 void HoughDetector::detect() {
   cv::cvtColor(bgr_image_, bw_image_, cv::COLOR_BGR2GRAY);
+  cv::cvtColor(bgr_image_, hls_image_, cv::COLOR_BGR2HLS);
+
 }
 
 bool HoughDetector::setImage(cv::Mat& image){
@@ -31,11 +33,13 @@ cv::Mat* HoughDetector::getBwImagePtr() {
   return &bw_image_;
 }
 
+cv::Mat* HoughDetector::getHlsImagePtr() {
+  return &hls_image_;
+}
 
 int HoughDetector::getSize() {
   return size_;
 }
-
 
 }
 
