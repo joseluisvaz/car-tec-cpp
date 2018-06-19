@@ -8,7 +8,7 @@
 
 using namespace std;
 
-int main(int argc, char** argv){
+int main(int argc, char** argv) {
 
   ros::init(argc, argv, "line_detector");
   ros::NodeHandle nodeHandle("~");

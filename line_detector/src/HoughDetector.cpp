@@ -15,7 +15,6 @@ HoughDetector::~HoughDetector() {};
 void HoughDetector::detect() {
   cv::cvtColor(bgr_image_, bw_image_, cv::COLOR_BGR2GRAY);
   cv::cvtColor(bgr_image_, hls_image_, cv::COLOR_BGR2HLS);
-
 }
 
 bool HoughDetector::setImage(cv::Mat& image){
