@@ -8,13 +8,17 @@ using namespace std;
 
 namespace line_detector {
 
-HoughDetector::HoughDetector(int size) : size_(size) {};
+HoughDetector::HoughDetector()
+    {
+      cutter_.setVertices();
+    };
 
 HoughDetector::~HoughDetector() {};
 
 void HoughDetector::detect() {
   cv::cvtColor(bgr_image_, bw_image_, cv::COLOR_BGR2GRAY);
   cv::cvtColor(bgr_image_, hls_image_, cv::COLOR_BGR2HLS);
+  cutter_.cutImage();
 }
 
 bool HoughDetector::setImage(cv::Mat& image){
@@ -34,10 +38,6 @@ cv::Mat* HoughDetector::getBwImagePtr() {
 
 cv::Mat* HoughDetector::getHlsImagePtr() {
   return &hls_image_;
-}
-
-int HoughDetector::getSize() {
-  return size_;
 }
 
 }

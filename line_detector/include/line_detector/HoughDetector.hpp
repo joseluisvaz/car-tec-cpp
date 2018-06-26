@@ -9,13 +9,15 @@
 #include <iostream>
 #include <opencv2/imgcodecs/imgcodecs.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include "line_detector/RoiCutter.hpp"
+
 
 namespace line_detector {
 
 class HoughDetector {
  public:
 
-  HoughDetector(int size);
+  HoughDetector();
   ~HoughDetector();
 
   void detect();
@@ -24,13 +26,13 @@ class HoughDetector {
   cv::Mat* getImagePtr();
   cv::Mat* getBwImagePtr();
   cv::Mat* getHlsImagePtr();
-  int getSize();
 
  private:
   cv::Mat bgr_image_;
   cv::Mat bw_image_;
   cv::Mat hls_image_;
-  int size_;
+
+  RoiCutter cutter_;
 
 };
 

@@ -4,17 +4,17 @@
 
 #include "line_detector/LineDetector.hpp"
 
-static const std::string WINDOW_NAME = "OpenCv Window";
+using namespace std;
+
+static const string WINDOW_NAME = "OpenCv Window";
 static const int SIZE = 5;
 
-using namespace std;
 
 namespace line_detector {
 
-LineDetector::LineDetector(ros::NodeHandle& nh, HoughDetector& detect)
+LineDetector::LineDetector(ros::NodeHandle& nh)
     : nh_{nh},
-      it_{nh_},
-      detector_{detect}
+      it_{nh_}
   {
 
   // Test hough_detect
@@ -72,6 +72,7 @@ void LineDetector::imageCb(const sensor_msgs::ImageConstPtr &message) {
   detector_.setImage(input);
   detector_.detect();
   cv::Mat* bw_pImg = detector_.getHlsImagePtr();
+  
 
 
   // If window is big enough

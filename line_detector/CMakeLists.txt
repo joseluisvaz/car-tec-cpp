@@ -77,10 +77,10 @@ include_directories(include ${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS}
 #  ${Boost_INCLUDE_DIRS}
 )
 
-## Declare a cpp library
-#add_library(${PROJECT_NAME}_core
-#   src/Algorithm.cpp
-#)
+
+add_library(${PROJECT_NAME}_utils
+        src/RoiCutter.cpp
+)
 
 add_library(${PROJECT_NAME}_core
         src/HoughDetector.cpp
@@ -112,12 +112,14 @@ add_dependencies(${PROJECT_NAME}
 #  ${catkin_LIBRARIES}
 #)
 target_link_libraries(${PROJECT_NAME}_core
+      ${PROJECT_NAME}_utils
 	    ${OpenCV_LIBS}
         ${catkin_LIBRARIES}
 )
 
 target_link_libraries(${PROJECT_NAME}
         ${PROJECT_NAME}_core
+        ${PROJECT_NAME}_utils
 	    ${OpenCV_LIBS}
         ${catkin_LIBRARIES}
 )

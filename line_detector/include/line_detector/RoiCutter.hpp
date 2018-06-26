@@ -1,13 +1,18 @@
 
-#ifndef PROJECT_DETECTOR_HPP
-#define PROJECT_DETECTOR_HPP
+#ifndef PROJECT_CUTTER_HPP
+#define PROJECT_CUTTER_HPP
 
 #include <vector>
-#include <tuple>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/imgcodecs/imgcodecs.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 using namespace std;
 
-namespace roi_cutter {
+static const int ROWS = 1;
+static const int COLUMNS = 8;
+
+namespace line_detector {
 
 class RoiCutter {
 
@@ -15,13 +20,27 @@ public:
     RoiCutter();
     ~RoiCutter();
 
-    typedef tuple<int, int> intTuple;
+    void setImageSize(vector<int>& size);
+    void setVertices();
+    void cutImage();
+    bool loadParameters();
     
-    void setImageSize(intTuple size);
-    void setVertices(vector<intTuple>& vertices);
-
 private:
-    vector<intTuple> vertices;
+    // Initialize matrix of points for
+    int numberOfPoints_ = 8;
+    cv::Point vertices_[8];
+
+    vector<int> img_size_;
+    vector<int> keke_;
+
+    vector<int> leftBottom_;
+    vector<int> rightBottom_;
+    vector<int> leftApex_;
+    vector<int> rightApex_;
+    vector<int> innerLeftBottom_;
+    vector<int> innerRightBottom_;
+    vector<int> innerLeftApex_;
+    vector<int> innerRightApex_;
 
 };
 

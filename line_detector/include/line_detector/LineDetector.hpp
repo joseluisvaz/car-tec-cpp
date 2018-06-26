@@ -22,8 +22,7 @@ namespace line_detector {
 class LineDetector {
  public:
 
-  LineDetector(ros::NodeHandle& nodeHandle,
-               HoughDetector& detect = *(new HoughDetector(9)));
+  LineDetector(ros::NodeHandle& nodeHandle);
   ~LineDetector();
 
  private:
@@ -34,7 +33,7 @@ class LineDetector {
   // Attributes
   ros::NodeHandle& nh_;
   image_transport::ImageTransport it_;
-  HoughDetector& detector_;
+  HoughDetector detector_;
   image_transport::Subscriber subscriber_;
   image_transport::Publisher publisher1_;
   image_transport::Publisher publisher2_;
