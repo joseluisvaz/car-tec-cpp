@@ -21,19 +21,18 @@ class HoughDetector {
   HoughDetector();
   ~HoughDetector();
 
-  void detect();
-
-  bool setImage(cv::Mat& image);
+  bool detect(cv::Mat& image);
   bool readParameters();
   cv::Mat* getImagePtr();
   cv::Mat* getBwImagePtr();
   cv::Mat* getHlsImagePtr();
+  cv::Mat* getEdgesPtr();
 
   cv::Mat edges_;
+  void findEdges(); 
 
  private:
 
-  void findEdges_(); 
 
   cv::Mat bgr_image_;
   cv::Mat bw_image_;

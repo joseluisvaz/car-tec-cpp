@@ -6,7 +6,7 @@
 
 using namespace std;
 
-static const string WINDOW_NAME = "OpenCv Window";
+static const string WINDOW_NAME = "Edges";
 static const int SIZE = 5;
 
 
@@ -57,26 +57,19 @@ void LineDetector::imageCb(const sensor_msgs::ImageConstPtr &message) {
 
   try {
     cv_ptr = cv_bridge::toCvCopy(message, sensor_msgs::image_encodings::BGR8);
-
   }
   catch (cv_bridge::Exception& e) {
     ROS_ERROR("cv_bridge exception: %s", e.what());
     return;
   }
 
-  cv::Mat input = cv_ptr->image;
-  detector_.setImage(input);
-  detector_.detect();
-  cv::Mat* bw_pImg = detector_.getHlsImagePtr();
-  
+  if (!detector_.detect(cv_ptr->image)) {
+    ROS_ERROR("Could not set image");
+    ros::requestShutdown();
+  }
 
-
-  // If window is big enough
-  // if (cv_ptr->image.rows > 60 && cv_ptr->image.cols > 60)
-  // cv::circle(cv_ptr->image, cv::Point(50, 50), 10, CV_RGB(255,0,0));
-
-  cv::imshow(WINDOW_NAME, *bw_pImg);
-  cv::waitKey(3);
+  cv::imshow(WINDOW_NAME, *detector_.getEdgesPtr());
+  cv::waitKey(1);
 
   publisher1_.publish(cv_ptr->toImageMsg());
 }

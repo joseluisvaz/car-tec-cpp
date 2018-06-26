@@ -22,7 +22,7 @@ public:
 
     void setImageSize(vector<int>& size);
     void setVertices();
-    void cutImage(cv::Mat& image);
+    cv::Mat* cutImage(cv::Mat& image);
     bool loadParameters();
     
 private:
