@@ -22,13 +22,16 @@ public:
 
     void setImageSize(vector<int>& size);
     void setVertices();
-    void cutImage();
+    void cutImage(cv::Mat& image);
     bool loadParameters();
     
 private:
     // Initialize matrix of points for
     int numberOfPoints_ = 8;
     cv::Point vertices_[8];
+
+    // TODO: ERAAASEE
+    cv::Mat output_;
 
     vector<int> img_size_;
     vector<int> keke_;

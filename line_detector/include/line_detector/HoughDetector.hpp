@@ -7,6 +7,7 @@
 
 
 #include <iostream>
+#include <ros/ros.h>
 #include <opencv2/imgcodecs/imgcodecs.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include "line_detector/RoiCutter.hpp"
@@ -23,14 +24,26 @@ class HoughDetector {
   void detect();
 
   bool setImage(cv::Mat& image);
+  bool readParameters();
   cv::Mat* getImagePtr();
   cv::Mat* getBwImagePtr();
   cv::Mat* getHlsImagePtr();
 
+  cv::Mat edges_;
+
  private:
+
+  void findEdges_(); 
+
   cv::Mat bgr_image_;
   cv::Mat bw_image_;
   cv::Mat hls_image_;
+
+  std::vector<int> hls_white1;
+  std::vector<int> hls_white2;
+  std::vector<int> hls_yellow1;
+  std::vector<int> hls_yellow2;
+  std::vector<int> canny_threshold;
 
   RoiCutter cutter_;
 

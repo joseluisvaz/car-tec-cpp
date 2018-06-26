@@ -14,11 +14,13 @@ RoiCutter::RoiCutter() {
 
 RoiCutter::~RoiCutter() {};
 
-void RoiCutter::cutImage() {
-    cv::Mat image = cv::Mat::zeros(img_size_[0], img_size_[1], CV_8UC3);
+void RoiCutter::cutImage(cv::Mat& image) {
+    cv::Mat mask = cv::Mat::zeros(img_size_[0], img_size_[1], CV_8U);
     const cv::Point* ppt =  vertices_ ;
-    cv::fillPoly(image, &ppt, &numberOfPoints_, 1, cv::Scalar(255, 255, 255), 8);
-    cv::imshow("Image", image);
+    cv::fillPoly(mask, &ppt, &numberOfPoints_, 1, cv::Scalar(255, 255, 255), 8);
+    // Bitwise and to cut the region imposed by mask
+    output_ = image & mask;
+    cv::imshow("Image", output_);
     cv::waitKey(1);
 
 }

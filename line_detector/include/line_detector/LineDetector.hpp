@@ -50,10 +50,7 @@ class LineDetector {
   int subs_queue_size_;
   int pubs_queue_size_;
   int buff_size_;
-  std::vector<int> hls_white1;
-  std::vector<int> hls_white2;
-  std::vector<int> hls_yellow1;
-  std::vector<int> hls_yellow2;
+
 
 
 };
