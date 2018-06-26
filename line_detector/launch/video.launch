@@ -4,10 +4,10 @@
     <include file="$(find line_detector)/launch/hardware/video_file.launch"/>
 
     <!-- Launch ROS line_detector Node -->
-    <node pkg="line_detector" type="line_detector_node.py"
+    <node pkg="line_detector" type="line_detector"
           name="line_detector" output="screen"
           clear_params="true" required="true">
-        <rosparam command="load" file="$(find line_detector)/config/expo_video.yaml"/>
+        <rosparam command="load" file="$(find line_detector)/config/challenge_video.yaml"/>
     </node>
 
 </launch>
