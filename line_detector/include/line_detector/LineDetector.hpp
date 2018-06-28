@@ -16,7 +16,6 @@
 #include <image_transport/image_transport.h>
 #include "line_detector/HoughDetector.hpp"
 
-
 namespace line_detector {
 
 class LineDetector {

@@ -63,7 +63,7 @@ void LineDetector::imageCb(const sensor_msgs::ImageConstPtr &message) {
     return;
   }
 
-  if (!detector_.detect(cv_ptr->image)) {
+  if (!detector_.detect(cv_ptr->image, DetectionColor::yellow)) {
     ROS_ERROR("Could not set image");
     ros::requestShutdown();
   }

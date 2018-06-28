@@ -21,14 +21,32 @@ HoughDetector::HoughDetector()
 HoughDetector::~HoughDetector() {};
 
 
-bool HoughDetector::detect(cv::Mat& image){
+bool HoughDetector::detect(cv::Mat& image, DetectionColor color) {
     if (&image == nullptr) {
       return false;
     }
     cv::cvtColor(image, bw_image_, cv::COLOR_BGR2GRAY);
     cv::cvtColor(image, hls_image_, cv::COLOR_BGR2HLS);
+    filterColor(color);
     findEdges();
     return true;
+}
+
+void HoughDetector::filterColor(DetectionColor color){
+  switch(color) {
+    case DetectionColor::white :
+      cv::inRange(hls_image_, hls_white1, hls_white2, color_range_img_);
+      break;
+    case DetectionColor::yellow :
+      cv::inRange(hls_image_, hls_yellow1, hls_yellow2, color_range_img_);
+      break;
+    default :
+      ROS_ERROR("Wrong color type sent to HoughDetector::filterColor");
+      ros::requestShutdown();
+      break;
+  }
+  cv::imshow("color range", color_range_img_);
+  cv::waitKey(1);
 }
 
 void HoughDetector::findEdges() {

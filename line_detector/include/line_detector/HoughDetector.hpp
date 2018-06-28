@@ -15,13 +15,19 @@
 
 namespace line_detector {
 
+enum DetectionColor {
+  white = 0,
+  yellow = 1
+};
+
 class HoughDetector {
  public:
 
   HoughDetector();
   ~HoughDetector();
 
-  bool detect(cv::Mat& image);
+  bool detect(cv::Mat& image, DetectionColor color);
+  void filterColor(DetectionColor color);
   bool readParameters();
   cv::Mat* getImagePtr();
   cv::Mat* getBwImagePtr();
@@ -37,6 +43,7 @@ class HoughDetector {
   cv::Mat bgr_image_;
   cv::Mat bw_image_;
   cv::Mat hls_image_;
+  cv::Mat color_range_img_;;
 
   std::vector<int> hls_white1;
   std::vector<int> hls_white2;
