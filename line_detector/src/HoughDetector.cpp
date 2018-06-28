@@ -8,8 +8,7 @@ using namespace std;
 
 namespace line_detector {
 
-HoughDetector::HoughDetector()
-    {
+HoughDetector::HoughDetector() {
       if (!readParameters()) {
         ROS_ERROR("Could not read parameters.");
         ros::requestShutdown();
@@ -21,15 +20,15 @@ HoughDetector::HoughDetector()
 HoughDetector::~HoughDetector() {};
 
 
-bool HoughDetector::detect(cv::Mat& image, DetectionColor color) {
+HoughDetector& HoughDetector::detect(cv::Mat& image) {
     if (&image == nullptr) {
-      return false;
+      ROS_ERROR("Could not set image");
+      ros::requestShutdown();
     }
     cv::cvtColor(image, bw_image_, cv::COLOR_BGR2GRAY);
     cv::cvtColor(image, hls_image_, cv::COLOR_BGR2HLS);
-    filterColor(color);
     findEdges();
-    return true;
+    return *this;
 }
 
 void HoughDetector::filterColor(DetectionColor color){

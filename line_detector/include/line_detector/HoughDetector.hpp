@@ -26,7 +26,7 @@ class HoughDetector {
   HoughDetector();
   ~HoughDetector();
 
-  bool detect(cv::Mat& image, DetectionColor color);
+  HoughDetector& detect(cv::Mat& image);
   void filterColor(DetectionColor color);
   bool readParameters();
   cv::Mat* getImagePtr();
@@ -35,6 +35,7 @@ class HoughDetector {
   cv::Mat* getEdgesPtr();
 
   cv::Mat edges_;
+  DetectionColor color_;
   void findEdges(); 
 
  private:
