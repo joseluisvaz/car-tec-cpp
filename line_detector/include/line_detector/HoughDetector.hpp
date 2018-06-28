@@ -51,6 +51,7 @@ class HoughDetector {
   std::vector<int> hls_yellow1;
   std::vector<int> hls_yellow2;
   std::vector<int> canny_threshold;
+  int dilatation_kernel_size;
 
   RoiCutter cutter_;
 

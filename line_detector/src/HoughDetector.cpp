@@ -9,26 +9,25 @@ using namespace std;
 namespace line_detector {
 
 HoughDetector::HoughDetector() {
-      if (!readParameters()) {
-        ROS_ERROR("Could not read parameters.");
-        ros::requestShutdown();
-      }
-
-      cutter_.setVertices();
-    };
+  if (!readParameters()) {
+    ROS_ERROR("Could not read parameters.");
+    ros::requestShutdown();
+  }
+  cutter_.setVertices();
+};
 
 HoughDetector::~HoughDetector() {};
 
 
 HoughDetector& HoughDetector::detect(cv::Mat& image) {
-    if (&image == nullptr) {
-      ROS_ERROR("Could not set image");
-      ros::requestShutdown();
-    }
-    cv::cvtColor(image, bw_image_, cv::COLOR_BGR2GRAY);
-    cv::cvtColor(image, hls_image_, cv::COLOR_BGR2HLS);
-    findEdges();
-    return *this;
+  if (&image == nullptr) {
+    ROS_ERROR("Could not set image");
+    ros::requestShutdown();
+  }
+  cv::cvtColor(image, bw_image_, cv::COLOR_BGR2GRAY);
+  cv::cvtColor(image, hls_image_, cv::COLOR_BGR2HLS);
+  findEdges();
+  return *this;
 }
 
 void HoughDetector::filterColor(DetectionColor color){
@@ -44,6 +43,11 @@ void HoughDetector::filterColor(DetectionColor color){
       ros::requestShutdown();
       break;
   }
+
+  auto kernel_size = cv::Size(dilatation_kernel_size, dilatation_kernel_size);
+  auto kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE, kernel_size);
+  cv::dilate(color_range_img_, color_range_img_, kernel);
+  cv::bitwise_and(color_range_img_, edges_, color_range_img_);
   cv::imshow("color range", color_range_img_);
   cv::waitKey(1);
 }
@@ -78,7 +82,8 @@ bool HoughDetector::readParameters() {
      && ros::param::get("~color_config/hls_white2", hls_white2)
      && ros::param::get("~color_config/hls_yellow1", hls_yellow1)
      && ros::param::get("~color_config/hls_yellow2", hls_yellow2)
-     && ros::param::get("~color_config/canny_threshold", canny_threshold)) 
+     && ros::param::get("~color_config/canny_threshold", canny_threshold) 
+     && ros::param::get("~color_config/dilatation_kernel_size", dilatation_kernel_size)) 
     return true;
   return false;
 }
