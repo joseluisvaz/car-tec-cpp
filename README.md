@@ -36,13 +36,40 @@ The development for the microcontroller software layer of this project is in the
 To build from source, clone the latest version from this repository into your catkin workspace and compile the package using
 
 	cd catkin_workspace/src
-	git clone https://github.com/ethz-asl/ros_package_template.git
+	git clone https://github.com/joseluisvaz/car-tec-cpp
+	git clone https://github.com/ros-drivers/video_stream_opencv
 	cd ../
-	catkin_make
+	catkin build
+
+If you have problems with the catkin build command make sure you have ```catkin_tools``` installed by runnning in the console
+
+```
+sudo apt-get install python-catkin-tools
+```
+
   
 ## Usage
 
-//TODO DESCRIBE QUICKEST WAY TO RUN THIS SOFTWARE
+After building the packages, just source the workspace like this:
+```
+source catkin_workspace/devel/setup.sh
+```
+The software runs using a ZED camera, a webcam or a videofile.
+
+### Video_file
+Create a folder named data inside the ```line_detector``` data node and afterwards poblate it with a ```.mp4``` video to be used as the input, then just run: 
+``` roslaunch master_node simulation.launch ```
+
+### Webcam
+For a webcam just use the following command
+``` roslaunch master_node master_video.launch ```
+
+## Xbox controller
+To substitute the perception-action pipeline with an xbox controller for its interface with the microcontroller board, just use:
+``` roslaunch master_node xbox.launch ```
+
+\\ TODO: Make script to install the dependencies for the python code and add virtual environment instructions if needed.
+
 
 ## NODES
 
