@@ -27,7 +27,8 @@ class HoughDetector {
   ~HoughDetector();
 
   HoughDetector& detect(cv::Mat& image);
-  void filterColor(DetectionColor color);
+  HoughDetector& filterColor(DetectionColor color);
+  HoughDetector& detectLines();
   bool readParameters();
   cv::Mat* getImagePtr();
   cv::Mat* getBwImagePtr();
@@ -40,18 +41,22 @@ class HoughDetector {
 
  private:
 
-
-  cv::Mat bgr_image_;
+  cv::Mat* bgr_image_ptr;
   cv::Mat bw_image_;
   cv::Mat hls_image_;
-  cv::Mat color_range_img_;;
+  cv::Mat color_range_img_;
+  std::vector<cv::Vec4i> detected_lines_;
 
+  // Parameters
   std::vector<int> hls_white1;
   std::vector<int> hls_white2;
   std::vector<int> hls_yellow1;
   std::vector<int> hls_yellow2;
   std::vector<int> canny_threshold;
   int dilatation_kernel_size;
+  int hough_threshold_;
+  int hough_min_line_length_;
+  int hough_max_line_gap_;
 
   RoiCutter cutter_;
 

@@ -64,7 +64,8 @@ void LineDetector::imageCb(const sensor_msgs::ImageConstPtr &message) {
   }
 
   detector_.detect(cv_ptr->image)
-           .filterColor(DetectionColor::white);
+           .filterColor(DetectionColor::white)
+           .detectLines();
 
   cv::imshow(WINDOW_NAME, *detector_.getEdgesPtr());
   cv::waitKey(1);

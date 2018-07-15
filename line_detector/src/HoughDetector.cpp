@@ -18,19 +18,19 @@ HoughDetector::HoughDetector() {
 
 HoughDetector::~HoughDetector() {};
 
-
 HoughDetector& HoughDetector::detect(cv::Mat& image) {
   if (&image == nullptr) {
     ROS_ERROR("Could not set image");
     ros::requestShutdown();
   }
+  bgr_image_ptr = &image;
   cv::cvtColor(image, bw_image_, cv::COLOR_BGR2GRAY);
   cv::cvtColor(image, hls_image_, cv::COLOR_BGR2HLS);
   findEdges();
   return *this;
 }
 
-void HoughDetector::filterColor(DetectionColor color){
+HoughDetector& HoughDetector::filterColor(DetectionColor color){
   switch(color) {
     case DetectionColor::white :
       cv::inRange(hls_image_, hls_white1, hls_white2, color_range_img_);
@@ -48,8 +48,31 @@ void HoughDetector::filterColor(DetectionColor color){
   auto kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE, kernel_size);
   cv::dilate(color_range_img_, color_range_img_, kernel);
   cv::bitwise_and(color_range_img_, edges_, color_range_img_);
-  cv::imshow("color range", color_range_img_);
+  return *this;
+}
+
+HoughDetector& HoughDetector::detectLines() {
+  HoughLinesP(color_range_img_, 
+              detected_lines_, 
+              1, 
+              CV_PI/180, 
+              hough_threshold_, 
+              hough_min_line_length_, 
+              hough_max_line_gap_);
+
+  // Print the lines in video
+  for (size_t i = 0; i < detected_lines_.size(); i++) {
+    cv::Vec4i line = detected_lines_[i];
+    cv::line(*bgr_image_ptr, 
+         cv::Point(line[0], line[1]), 
+         cv::Point(line[2], line[3]), 
+         cv::Scalar(0,0,255), 
+         3, 
+         CV_AA);
+  }
+  cv::imshow("lines show", *getImagePtr());
   cv::waitKey(1);
+  return *this;
 }
 
 void HoughDetector::findEdges() {
@@ -62,7 +85,7 @@ void HoughDetector::findEdges() {
 }
 
 cv::Mat* HoughDetector::getImagePtr() {
-  return &bgr_image_;
+  return bgr_image_ptr;
 }
 
 cv::Mat* HoughDetector::getBwImagePtr() {
@@ -83,6 +106,9 @@ bool HoughDetector::readParameters() {
      && ros::param::get("~color_config/hls_yellow1", hls_yellow1)
      && ros::param::get("~color_config/hls_yellow2", hls_yellow2)
      && ros::param::get("~color_config/canny_threshold", canny_threshold) 
+     && ros::param::get("~color_config/hough_threshold", hough_threshold_) 
+     && ros::param::get("~color_config/hough_min_line_length", hough_min_line_length_) 
+     && ros::param::get("~color_config/hough_max_line_gap", hough_max_line_gap_) 
      && ros::param::get("~color_config/dilatation_kernel_size", dilatation_kernel_size)) 
     return true;
   return false;
