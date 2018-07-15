@@ -27,8 +27,7 @@ LineDetector::LineDetector(ros::NodeHandle& nh)
                               &LineDetector::imageCb, this);
   publisher1_ = it_.advertise(publisherTopic1_, 1000);
   publisher2_ = it_.advertise(publisherTopic2_, 1000);
-  publisher3_ = it_.advertise(publisherTopic3_, 1000);
-  publisher4_ = it_.advertise(publisherTopic4_, 1000);
+  publisher_segments_ = nh_.advertise<car_tec_msgs::SegmentList>(publisherTopicSegments_, 1000);
 
   cv::namedWindow(WINDOW_NAME);
   ROS_INFO("Succesfully launched node. ");
@@ -43,8 +42,7 @@ bool LineDetector::readParameters() {
   if (nh_.getParam("subscriber_topic", subscriberTopic_)
       && nh_.getParam("publisher_topic_1", publisherTopic1_)
       && nh_.getParam("publisher_topic_2", publisherTopic2_)
-      && nh_.getParam("publisher_topic_3", publisherTopic3_)
-      && nh_.getParam("publisher_topic_4", publisherTopic4_)
+      && nh_.getParam("publisher_topic_segments", publisherTopicSegments_)
       && nh_.getParam("subs_queue_size", subs_queue_size_)
       && nh_.getParam("pubs_queue_size", pubs_queue_size_)
       && nh_.getParam("buff_size", buff_size_))
@@ -67,10 +65,33 @@ void LineDetector::imageCb(const sensor_msgs::ImageConstPtr &message) {
            .filterColor(DetectionColor::white)
            .detectLines();
 
-  cv::imshow(WINDOW_NAME, *detector_.getEdgesPtr());
-  cv::waitKey(1);
+  car_tec_msgs::SegmentList segmentList;
+  toSegmentList(*detector_.getDetectedLinesPtr(), segmentList);
 
+  cv_ptr->image = *detector_.getImagePtr();
   publisher1_.publish(cv_ptr->toImageMsg());
+  
+  cv_ptr->image = *detector_.getEdgesPtr();
+  publisher2_.publish(cv_ptr->toImageMsg());
+
+
+  // TODO: ERASE THIS DEBUGGING STAGE
+
+
+  publisher_segments_.publish(segmentList);
+
+}
+
+void LineDetector::toSegmentList(std::vector<cv::Vec4i>& inputLines, 
+                                 car_tec_msgs::SegmentList& outputSegments) {
+  for (auto& line: inputLines) {
+    car_tec_msgs::Segment segment;
+    segment.pixels_normalized[0].x = line[0];
+    segment.pixels_normalized[0].y = line[1];
+    segment.pixels_normalized[1].x = line[2];
+    segment.pixels_normalized[1].y = line[3];
+    outputSegments.segments.push_back(segment);
+  }
 }
 
 }

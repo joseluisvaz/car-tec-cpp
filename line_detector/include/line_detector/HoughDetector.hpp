@@ -34,6 +34,7 @@ class HoughDetector {
   cv::Mat* getBwImagePtr();
   cv::Mat* getHlsImagePtr();
   cv::Mat* getEdgesPtr();
+  std::vector<cv::Vec4i>* getDetectedLinesPtr();
 
   cv::Mat edges_;
   DetectionColor color_;

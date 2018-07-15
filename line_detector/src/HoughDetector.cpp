@@ -67,11 +67,9 @@ HoughDetector& HoughDetector::detectLines() {
          cv::Point(line[0], line[1]), 
          cv::Point(line[2], line[3]), 
          cv::Scalar(0,0,255), 
-         3, 
+         3, /*thickness*/ 
          CV_AA);
   }
-  cv::imshow("lines show", *getImagePtr());
-  cv::waitKey(1);
   return *this;
 }
 
@@ -98,6 +96,10 @@ cv::Mat* HoughDetector::getHlsImagePtr() {
 
 cv::Mat* HoughDetector::getEdgesPtr() {
   return &edges_;
+}
+
+std::vector<cv::Vec4i>* HoughDetector::getDetectedLinesPtr() {
+  return &detected_lines_;
 }
 
 bool HoughDetector::readParameters() {

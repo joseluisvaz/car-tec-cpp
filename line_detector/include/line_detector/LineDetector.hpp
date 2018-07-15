@@ -15,6 +15,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <image_transport/image_transport.h>
 #include "line_detector/HoughDetector.hpp"
+#include <car_tec_msgs/SegmentList.h>
+#include <car_tec_msgs/Segment.h>
 
 namespace line_detector {
 
@@ -28,6 +30,8 @@ class LineDetector {
 
   bool readParameters();
   void imageCb(const sensor_msgs::ImageConstPtr &message);
+  void toSegmentList(std::vector<cv::Vec4i>& inputLines, 
+                     car_tec_msgs::SegmentList& outputSegments);
 
   // Attributes
   ros::NodeHandle& nh_;
@@ -36,16 +40,14 @@ class LineDetector {
   image_transport::Subscriber subscriber_;
   image_transport::Publisher publisher1_;
   image_transport::Publisher publisher2_;
-  image_transport::Publisher publisher3_;
-  image_transport::Publisher publisher4_;
+  ros::Publisher publisher_segments_;
 
 
   // Config parameters
   std::string subscriberTopic_;
   std::string publisherTopic1_;
   std::string publisherTopic2_;
-  std::string publisherTopic3_;
-  std::string publisherTopic4_;
+  std::string publisherTopicSegments_;
   int subs_queue_size_;
   int pubs_queue_size_;
   int buff_size_;
